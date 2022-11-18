@@ -8,22 +8,34 @@ using System.DirectoryServices;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+enum Activity
+{
+    running,
+    standing,
+    jumping
+}
 
 namespace eindopdracht
 {
-    internal class Hero : IGameObject
+    internal class Hero : IGameObject, IMovable
     {
         Texture2D heroTexture;
         Animatie animatie;
         private Vector2 positie;
         private Vector2 snelheid;
         private SpriteEffects SpriteDirection;
+        private MovementManager movementManager;
+        private Vector2 oldpos;
+        private Rectangle stangingrect;
+
+        private Activity activity;
 
         public Hero(Texture2D texture)
         {
             heroTexture = texture;
             animatie = new Animatie();
             positie = new Vector2(0, 0);
+            movementManager = new MovementManager();
 
             animatie.AddFrame(new AnimationFrame(new Rectangle(0, 150, 48, 50)));
             animatie.AddFrame(new AnimationFrame(new Rectangle(46, 150, 48, 50)));
@@ -35,49 +47,69 @@ namespace eindopdracht
             animatie.AddFrame(new AnimationFrame(new Rectangle(322, 150, 48, 50)));
         }
 
+         Vector2 IMovable.Position { get => positie; set => positie = value; }
+         Vector2 IMovable.Speed { get => snelheid; set => snelheid = value; }
+        
+
         public void Draw(SpriteBatch spriteBatch)
         {
-        
-        snelheid = new Vector2(2, 2);
 
-        spriteBatch.Draw(heroTexture, positie, animatie.CurrentFrame.SourceRectangle, Color.White,0,new Vector2(0,0),1,SpriteDirection,1);
+            snelheid = new Vector2(2, 2);
+
+
+            
+                spriteBatch.Draw(heroTexture, positie, animatie.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
+            
+            switch (activity)
+            {
+                case Activity.running:
+                    spriteBatch.Draw(heroTexture, positie, animatie.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
+                    break;
+                case Activity.standing:
+                    spriteBatch.Draw(heroTexture, positie, new Rectangle(0, 0, 48, 50), Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
+
+                    break;
+                case Activity.jumping:
+
+                default:
+                    break;
+            }
+
         }
 
         public void Update(GameTime gameTime)
         {
-            KeyboardState state = Keyboard.GetState();
-            var direction = Vector2.Zero;
-            if (state.IsKeyDown(Keys.Left))
+
+            Move();
+
+            
+
+            if (oldpos.X < positie.X)
             {
-                direction.X -= 1;
-                SpriteDirection = SpriteEffects.FlipHorizontally;
-            }
-            if (state.IsKeyDown(Keys.Right))
-            {
-                direction.X += 1;
                 SpriteDirection = SpriteEffects.None;
+                animatie.Update(gameTime);
+                activity = Activity.running;
             }
-            if (state.IsKeyDown(Keys.Up))
+            else if(oldpos.X > positie.X)
             {
-                direction.Y -= 1;
-            }
-            if (state.IsKeyDown(Keys.Down))
+                SpriteDirection = SpriteEffects.FlipHorizontally;
+                animatie.Update(gameTime);
+                activity=Activity.running;
+            } if (oldpos.Y == positie.Y)
             {
-                direction.Y += 1;
+                activity = Activity.standing;
             }
-            direction *= snelheid;
-            positie += direction;
-
-            animatie.Update(gameTime);
-
-           
+            
+            oldpos.X = positie.X;
 
         }
-        public void Move()
+        private void Move()
         {
-            
+            movementManager.Move(this);
         }
+
+        
     }
-       
-            
+
+
 }
