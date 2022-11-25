@@ -12,28 +12,41 @@ namespace eindopdracht
 {
     internal class MovementManager 
     {
+        bool upkeyisup =true;
         public void Move(IMovable movable )
         {
             KeyboardState state = Keyboard.GetState();
             var direction = Vector2.Zero;
-            if (state.IsKeyDown(Keys.Left))
+            
+            if (state.IsKeyDown(Keys.Left) && movable.Position.X > 0)
             {
                 direction.X -= 1;
                 
             }
-            if (state.IsKeyDown(Keys.Right))
+            if (state.IsKeyDown(Keys.Right) && movable.Position.X + 48 < 800)
             {
                 direction.X += 1;
                 
             }
             if (state.IsKeyDown(Keys.Up))
             {
-                direction.Y -= 1;
+                if (upkeyisup)
+                {
+                upkeyisup = false;
+                
+                direction.Y -= 10;
+                }
+                
+                
             }
-            if (state.IsKeyDown(Keys.Down))
+            if (state.IsKeyUp(Keys.Up))
             {
-                direction.Y += 1;
+
+                upkeyisup = true;
+                
+
             }
+
             direction *= movable.Speed;
             movable.Position += direction;
 
