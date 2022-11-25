@@ -54,11 +54,11 @@ namespace eindopdracht
         public void Draw(SpriteBatch spriteBatch)
         {
 
-            snelheid = new Vector2(2, 2);
+            snelheid = new Vector2(1, 1);
 
 
             
-                spriteBatch.Draw(heroTexture, positie, animatie.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
+                
             
             switch (activity)
             {
@@ -95,7 +95,7 @@ namespace eindopdracht
                 SpriteDirection = SpriteEffects.FlipHorizontally;
                 animatie.Update(gameTime);
                 activity=Activity.running;
-            } if (oldpos.Y == positie.Y)
+            }else  if (oldpos.X == positie.X)
             {
                 activity = Activity.standing;
             }
