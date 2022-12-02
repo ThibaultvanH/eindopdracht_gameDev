@@ -19,15 +19,16 @@ namespace eindopdracht
 
         public Block(int x, int y, GraphicsDevice graphics, Texture2D blocktexture)
         {
-            BoundingBox = new Rectangle(x, y, 100, 100);
+            BoundingBox = new Rectangle(592*2, 645 * 1, 592, 645);
             Passable = false;
             position = new Vector2(x, y);
             Texture = blocktexture;
+            Color = Color.White;
             
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture,position,BoundingBox, Color);
+            spriteBatch.Draw(Texture,position,BoundingBox, Color.White, 0, new Vector2(0, 0),new Vector2(0.1f),SpriteEffects.None,1);
             
            
 

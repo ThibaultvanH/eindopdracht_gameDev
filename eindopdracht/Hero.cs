@@ -10,6 +10,9 @@ using System.DirectoryServices;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
+
 enum Activity
 {
     running,
@@ -27,6 +30,7 @@ namespace eindopdracht
         Texture2D heroTexture;
         Animatie animatie;
         private Vector2 positie;
+        private int height = 50;
         private Vector2 snelheid = new Vector2(1,1);
         private SpriteEffects SpriteDirection;
         private MovementManager movementManager;
@@ -34,6 +38,8 @@ namespace eindopdracht
         private Activity activity;
         private Texture2D Bloktexture;
         public Rectangle blokrec = new Rectangle(0, 0, 50, 50);
+        public Rectangle feet = new Rectangle(0, 0, 30, 5);
+        public Rectangle body = new Rectangle(0, 0, 30, 5);
         public bool isFaling = true;
         
 
@@ -72,41 +78,59 @@ namespace eindopdracht
             {
                 case Activity.running:
 
-                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 40, 40);
+                    height = 46;
+                    feet = new Rectangle((int)positie.X, (int)positie.Y+ height, 40, 2);
+                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 40, height);                    
                     spriteBatch.Draw(Bloktexture, new Vector2(positie.X , positie.Y +10), blokrec, Color.White);
-                    spriteBatch.Draw(heroTexture,positie,animatie.CurrentFrame.SourceRectangle, Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
-
+                    body = animatie.CurrentFrame.SourceRectangle;
                     break;
+
                 case Activity.standing:
 
-                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 25, 46);
-                    spriteBatch.Draw(Bloktexture,new Vector2(positie.X +10 , positie.Y+2), blokrec, Color.White);
-                    spriteBatch.Draw(heroTexture, positie, new Rectangle(0, 0, 48, 50), Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
+                    height = 50;
+                    feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
 
+                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 25, height);
+                    spriteBatch.Draw(Bloktexture,new Vector2(positie.X +10 , positie.Y+2), blokrec, Color.White);
+                    body = new Rectangle(0, 0, 48, 50);
                     break;
+
                 case Activity.jumping:
                     break;
-                case Activity.crouching:
-                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 34, 35);
-                    spriteBatch.Draw(Bloktexture, new Vector2(positie.X +5, positie.Y + 17), blokrec, Color.White);
-                    spriteBatch.Draw(heroTexture, positie, new Rectangle(46, 0, 48, 50), Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
 
+                case Activity.crouching:
+
+                    height = 46;
+                    feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
+                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 34, height);
+                    spriteBatch.Draw(Bloktexture, new Vector2(positie.X +5, positie.Y + 17), blokrec, Color.White);
+                    body = new Rectangle(46, 0, 48, 50);
                     break;
+
                 case Activity.fighting:
-                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, 46);
+
+                    height = 46;
+                    feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
+                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, height);
                     spriteBatch.Draw(Bloktexture, new Vector2(positie.X + 10, positie.Y + 2), blokrec, Color.White);
-                    spriteBatch.Draw(heroTexture, positie, new Rectangle(138, 0, 48, 50), Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
+                    body = new Rectangle(138, 0, 48, 50);
                     break;
+
                 case Activity.faling:
-                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, 46);
+
+
+                    height = 46;
+                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, height);
+                    feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
                     spriteBatch.Draw(Bloktexture, new Vector2(positie.X + 10, positie.Y + 2), blokrec, Color.White);
-                    spriteBatch.Draw(heroTexture, positie, new Rectangle(92, 50, 48, 50), Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
+                    body = new Rectangle(92, 50, 48, 50);
                     break;
 
                 default:
                     
                     break;
             }
+            spriteBatch.Draw(heroTexture, positie, body, Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
 
         }
 

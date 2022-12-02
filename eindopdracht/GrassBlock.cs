@@ -11,14 +11,15 @@ namespace eindopdracht
     internal class GrassBlock : Block
     {
         
-            public GrassBlock(int x, int y, GraphicsDevice graphics, Texture2D texture2D) : base(x, y, graphics , texture2D)
+            public GrassBlock(int x, int y, GraphicsDevice graphics, Texture2D blocktexture) : base(x, y, graphics , blocktexture)
             {
-                BoundingBox = new Rectangle(x, y, 10, 10);
-                Passable = true;
-                Color = Color.GreenYellow;
-                Texture = new Texture2D(graphics, 1, 1);
-                
-            }
+            BoundingBox = new Rectangle(592 * 2, 645*0, 592, 645);
+            Passable = false;
+            position = new Vector2(x, y);
+            Texture = blocktexture;
+            Color = Color.White;
+
+        }
 
         
     }

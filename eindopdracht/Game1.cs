@@ -13,12 +13,15 @@ namespace eindopdracht
         private GraphicsDevice _device;
 
         private SpriteBatch _spriteBatch;
-        private Texture2D texture;
+        
         private Rectangle wall = new Rectangle(5,250,500,25);
         
         public Vector2 position;
-        public Texture2D bloktexture;
-        public Texture2D Blocktexture;
+
+        private Texture2D texture;
+        private Texture2D bloktexture;
+        private Texture2D Blocktexture;
+        private Texture2D BG;
         int[,] curentlevel = level.level1;
         List<Block> blocks = new List<Block>();
         BlockFactory blockFactory = new BlockFactory();
@@ -49,7 +52,8 @@ namespace eindopdracht
             texture = Content.Load<Texture2D>("hero");
             bloktexture = new Texture2D(GraphicsDevice, 1, 1);
             bloktexture.SetData(new Color[] { Color.DarkSlateGray });
-            Blocktexture = Content.Load<Texture2D>("Tile");
+            Blocktexture = Content.Load<Texture2D>("Tile-svg");
+            BG = Content.Load<Texture2D>("BG");
         }
 
         private void InitializeGameObjects()
@@ -75,7 +79,7 @@ namespace eindopdracht
 
             // TODO: Add your update logic here
             hero.Update(gameTime);
-            if (hero.blokrec.Intersects(wall))
+            if (hero.feet.Intersects(wall))
             {             
                 Debug.WriteLine("detect");
                 hero.isFaling = false;
@@ -93,6 +97,7 @@ namespace eindopdracht
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
+            _spriteBatch.Draw(BG,new Rectangle(0,-100,1000,750),Color.White);
             hero.Draw(_spriteBatch);
             _spriteBatch.Draw(bloktexture, wall, Color.AliceBlue);
             foreach (Block block in blocks)
@@ -109,7 +114,12 @@ namespace eindopdracht
             {
                 for (int k = 0; k < curentlevel.GetLength(1); k++)
                 {
-                    blocks.Add(blockFactory.CreateBlock((level.type)curentlevel[l, k], l*10, k*10,GraphicsDevice, bloktexture));
+                    
+
+                    
+                    
+                    
+                    blocks.Add(blockFactory.CreateBlock((level.type)curentlevel[l, k], k* 59, l*64, GraphicsDevice, Blocktexture));
                 }
             }
         }
