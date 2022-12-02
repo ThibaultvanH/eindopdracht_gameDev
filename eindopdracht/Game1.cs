@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace eindopdracht
@@ -9,19 +10,25 @@ namespace eindopdracht
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
-        
+        private GraphicsDevice _device;
+
         private SpriteBatch _spriteBatch;
         private Texture2D texture;
         private Rectangle wall = new Rectangle(5,250,500,25);
-        Hero hero;
+        
         public Vector2 position;
         public Texture2D bloktexture;
-       
+        public Texture2D Blocktexture;
+        int[,] curentlevel = level.level1;
+        List<Block> blocks = new List<Block>();
+        BlockFactory blockFactory = new BlockFactory();
+        Hero hero;
         
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
+            
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -30,21 +37,26 @@ namespace eindopdracht
         {
             // TODO: Add your initialization logic here
 
+            
+            loadTextures();
+            InitializeGameObjects();           
+            base.Initialize();
+
+        }
+
+        private void loadTextures()
+        {
             texture = Content.Load<Texture2D>("hero");
             bloktexture = new Texture2D(GraphicsDevice, 1, 1);
             bloktexture.SetData(new Color[] { Color.DarkSlateGray });
-            InitializeGameObjects();
-            
-            base.Initialize();
-
+            Blocktexture = Content.Load<Texture2D>("Tile");
         }
 
         private void InitializeGameObjects()
         {
             hero = new Hero(texture, bloktexture);
+            CreateBlocks();
         }
-
-
 
         protected override void LoadContent()
         {
@@ -71,9 +83,8 @@ namespace eindopdracht
             else
             {
                 hero.isFaling = true;
-            }
-            Debug.WriteLine(hero.blokrec.Location);
-             Debug.WriteLine(wall.Location);
+                Debug.WriteLine("isfaling");
+            }      
             base.Update(gameTime);
 
         }
@@ -84,8 +95,23 @@ namespace eindopdracht
             _spriteBatch.Begin();
             hero.Draw(_spriteBatch);
             _spriteBatch.Draw(bloktexture, wall, Color.AliceBlue);
+            foreach (Block block in blocks)
+            {
+                block.Draw(_spriteBatch);
+            }
             _spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        private void CreateBlocks()
+        {
+            for (int l = 0; l < curentlevel.GetLength(0); l++)
+            {
+                for (int k = 0; k < curentlevel.GetLength(1); k++)
+                {
+                    blocks.Add(blockFactory.CreateBlock((level.type)curentlevel[l, k], l*10, k*10,GraphicsDevice, bloktexture));
+                }
+            }
         }
 
 

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
 using System.Text;
@@ -113,9 +114,10 @@ namespace eindopdracht
         {
             if (activity != Activity.crouching )
             Move();
-            if (isFaling)
+            if (isFaling && activity != Activity.crouching)
             {
                 positie.Y += 2;
+                Debug.WriteLine(isFaling);
             }
             activitys(gameTime);
             
