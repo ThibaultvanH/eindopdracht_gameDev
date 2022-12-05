@@ -1,4 +1,5 @@
 ﻿using eindopdracht.blocks;
+using eindopdracht.enemys;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,19 +15,21 @@ namespace eindopdracht
         private GraphicsDevice _device;
 
         private SpriteBatch _spriteBatch;
-        
-        
-        
+        public static List<Rectangle> grassup = new List<Rectangle>();
+        public static List<Rectangle> grassdown = new List<Rectangle>();
+
         public Vector2 position;
 
         private Texture2D texture;
         private Texture2D bloktexture;
         private Texture2D Blocktexture;
         private Texture2D BG;
+        private Texture2D greenmantexture;
         int[,] curentlevel = level.level1;
         public static List<Block> blocks = new List<Block>();
         BlockFactory blockFactory = new BlockFactory();
         Hero hero;
+        greenman greenman1;
         
 
         public Game1()
@@ -55,11 +58,14 @@ namespace eindopdracht
             bloktexture.SetData(new Color[] { Color.DarkSlateGray });
             Blocktexture = Content.Load<Texture2D>("Tile-svg3");
             BG = Content.Load<Texture2D>("BG");
+            greenmantexture = Content.Load<Texture2D>("Walk");
+
         }
 
         private void InitializeGameObjects()
         {
             hero = new Hero(texture, bloktexture);
+            greenman1 = new greenman(greenmantexture);
             CreateBlocks();
         }
 
@@ -81,6 +87,7 @@ namespace eindopdracht
 
 
             hero.Update(gameTime);
+            greenman1?.Update(gameTime);
             base.Update(gameTime);
 
         }
@@ -91,6 +98,7 @@ namespace eindopdracht
             _spriteBatch.Begin();
             _spriteBatch.Draw(BG,new Rectangle(0,-100,1000,750),Color.White);
             hero.Draw(_spriteBatch);
+            greenman1.Draw(_spriteBatch);
             foreach (Block block in blocks)
             {
                 block?.Draw(_spriteBatch);

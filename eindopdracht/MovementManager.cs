@@ -35,7 +35,6 @@ namespace eindopdracht
                 {
                 upkeyisup = false;
                     
-                    
 
 
                 }

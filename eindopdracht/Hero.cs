@@ -32,22 +32,26 @@ namespace eindopdracht
         Texture2D heroTexture;
         Animatie animatie;
         private Vector2 positie;
-        private int height = 50;
-        private Vector2 snelheid = new Vector2(1,1);
+        
+
+
+        private Vector2 snelheid = new Vector2(1.2f,1.2f);
         public Vector2 velocity = new Vector2();
+
+
         private SpriteEffects SpriteDirection;
         private MovementManager movementManager;
         private Vector2 oldpos;
         private Activity activity;
         private Texture2D Bloktexture;
+        
+        private int height = 50;
         public Rectangle blokrec = new Rectangle(0, 0, 50, 50);
         public Rectangle feet = new Rectangle(0, 0, 30, 5);
         public Rectangle body = new Rectangle(0, 0, 30, 5);
-        public bool istouchingground = false;
-
-        
-
-
+        public Rectangle fist = new Rectangle(0, 0, 5, 15);
+        public Rectangle head = new Rectangle(0, 0, 5, 15);
+        public bool isheadtouching = false;
 
 
         public Hero(Texture2D texture, Texture2D bloktexture)
@@ -85,7 +89,7 @@ namespace eindopdracht
                     
                     feet = new Rectangle((int)positie.X, (int)positie.Y+ height, 40, 2);
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 40, height);                    
-                    spriteBatch.Draw(Bloktexture, new Vector2(positie.X , positie.Y +10), blokrec, Color.White);
+                    
                     body = animatie.CurrentFrame.SourceRectangle;
                     break;
 
@@ -95,7 +99,7 @@ namespace eindopdracht
                     feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
 
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 25, height);
-                    spriteBatch.Draw(Bloktexture,new Vector2(positie.X +10 , positie.Y+2), blokrec, Color.White);
+                    
                     body = new Rectangle(0, 0, 48, 50);
                     break;
 
@@ -107,7 +111,7 @@ namespace eindopdracht
                     
                     feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 34, height);
-                    spriteBatch.Draw(Bloktexture, new Vector2(positie.X +5, positie.Y + 17), blokrec, Color.White);
+                    
                     body = new Rectangle(46, 0, 48, 50);
                     break;
 
@@ -116,7 +120,20 @@ namespace eindopdracht
                     
                     feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, height);
-                    spriteBatch.Draw(Bloktexture, new Vector2(positie.X + 10, positie.Y + 2), blokrec, Color.White);
+                    fist = new Rectangle((int)positie.X+330, (int)positie.Y + 10, 10, 50);
+                    if (SpriteDirection == SpriteEffects.FlipHorizontally)
+                    {
+                        spriteBatch.Draw(Bloktexture, new Vector2(positie.X , positie.Y + 2), fist, Color.Yellow);
+                    }
+                    else
+                    {
+                        spriteBatch.Draw(Bloktexture, new Vector2(positie.X + 40, positie.Y + 2), fist, Color.Yellow);
+                    }
+                    
+                    
+                    
+
+                   
                     body = new Rectangle(138, 0, 48, 50);
                     break;
 
@@ -126,7 +143,7 @@ namespace eindopdracht
                     
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, height);
                     feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
-                    spriteBatch.Draw(Bloktexture, new Vector2(positie.X + 10, positie.Y + 2), blokrec, Color.White);
+                    
                     body = new Rectangle(92, 50, 48, 50);
                     break;
 
@@ -142,34 +159,33 @@ namespace eindopdracht
         {
             KeyboardState state = Keyboard.GetState();
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (activity != Activity.crouching )
-            Move();
+            head = new Rectangle((int)positie.X, (int)positie.Y , 10, 50);
+            if (activity != Activity.crouching )Move();
+            
             if (isTouchingGround())
             {
                 velocity.Y = 0;
+                isheadtouching = false;
                 if (state.IsKeyDown(Keys.Up))
                 {
-                    velocity.Y -= 500;
-                    
-
+                    velocity.Y -= 400;
                 }
             }
-            else
+            else if(headTouchingGround() && isheadtouching == false)
             {
+                if (velocity.Y < 0)
+                {
+                    velocity.Y = 0;
+                }
                 
-                velocity.Y += 15 ;
-            
+                isheadtouching = true;
+            }
+            else
+            {                
+                velocity.Y += 12 ;
             }
            positie.Y += snelheid.Y * velocity.Y * dt;
-
-
-            
-            
-            
             activitys(gameTime);
-            
-
-
         }
         private void Move()
         {
@@ -214,17 +230,31 @@ namespace eindopdracht
 
         private bool isTouchingGround()
         {
+            foreach (var item in Game1.grassup)
+            {                              
+                if (item.Intersects(feet))
+                {                    
+                        return true;
+                }
+            }
 
+            return false;
 
+        }
+        private bool headTouchingGround()
+        {
+            foreach (var item in Game1.grassdown)
+            {
+                if (item.Intersects(head))
+                {
+                    return true;
+                }
+            }
 
-            return positie.Y + height > 6 * 64;
-            
-
-
+            return false;
 
         }
 
-       
     }
 
 
