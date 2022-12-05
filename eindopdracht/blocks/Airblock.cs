@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace eindopdracht
+namespace eindopdracht.blocks
 {
     internal class Airblock : Block
     {

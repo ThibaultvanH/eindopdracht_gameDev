@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+
 namespace eindopdracht
 {
-    internal interface IGameObject
+    internal interface IGameObject 
     {
 
         void Update(GameTime gameTime);

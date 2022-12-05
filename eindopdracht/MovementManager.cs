@@ -16,6 +16,7 @@ namespace eindopdracht
         public void Move(IMovable movable )
         {
             KeyboardState state = Keyboard.GetState();
+
             var direction = Vector2.Zero;
             
             if (state.IsKeyDown(Keys.Left) && movable.Position.X > 0)
@@ -33,8 +34,10 @@ namespace eindopdracht
                 if (upkeyisup)
                 {
                 upkeyisup = false;
-                
-                direction.Y -= 10;
+                    
+                    
+
+
                 }
                 
                 
@@ -54,6 +57,7 @@ namespace eindopdracht
             var toekomstigePositie = movable.Position + afstand;
             movable.Position = toekomstigePositie;
             movable.Position += afstand;
+            
         }
 
     }

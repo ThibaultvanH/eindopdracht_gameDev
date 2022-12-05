@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using eindopdracht.blocks;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace eindopdracht
 
             if (type == level.type.air)
             {
-                newBlock = new Airblock(x, y, graphics, blocktexture);
+                
 
                 
             }

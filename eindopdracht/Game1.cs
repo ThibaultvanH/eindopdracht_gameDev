@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using eindopdracht.blocks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -7,14 +8,14 @@ using System.Diagnostics;
 
 namespace eindopdracht
 {
-    public class Game1 : Game
+    internal class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private GraphicsDevice _device;
 
         private SpriteBatch _spriteBatch;
         
-        private Rectangle wall = new Rectangle(5,250,500,25);
+        
         
         public Vector2 position;
 
@@ -23,7 +24,7 @@ namespace eindopdracht
         private Texture2D Blocktexture;
         private Texture2D BG;
         int[,] curentlevel = level.level1;
-        List<Block> blocks = new List<Block>();
+        public static List<Block> blocks = new List<Block>();
         BlockFactory blockFactory = new BlockFactory();
         Hero hero;
         
@@ -52,7 +53,7 @@ namespace eindopdracht
             texture = Content.Load<Texture2D>("hero");
             bloktexture = new Texture2D(GraphicsDevice, 1, 1);
             bloktexture.SetData(new Color[] { Color.DarkSlateGray });
-            Blocktexture = Content.Load<Texture2D>("Tile-svg");
+            Blocktexture = Content.Load<Texture2D>("Tile-svg3");
             BG = Content.Load<Texture2D>("BG");
         }
 
@@ -77,18 +78,9 @@ namespace eindopdracht
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+
+
             hero.Update(gameTime);
-            if (hero.feet.Intersects(wall))
-            {             
-                Debug.WriteLine("detect");
-                hero.isFaling = false;
-            }
-            else
-            {
-                hero.isFaling = true;
-                Debug.WriteLine("isfaling");
-            }      
             base.Update(gameTime);
 
         }
@@ -99,10 +91,9 @@ namespace eindopdracht
             _spriteBatch.Begin();
             _spriteBatch.Draw(BG,new Rectangle(0,-100,1000,750),Color.White);
             hero.Draw(_spriteBatch);
-            _spriteBatch.Draw(bloktexture, wall, Color.AliceBlue);
             foreach (Block block in blocks)
             {
-                block.Draw(_spriteBatch);
+                block?.Draw(_spriteBatch);
             }
             _spriteBatch.End();
             base.Draw(gameTime);
@@ -114,10 +105,7 @@ namespace eindopdracht
             {
                 for (int k = 0; k < curentlevel.GetLength(1); k++)
                 {
-                    
 
-                    
-                    
                     
                     blocks.Add(blockFactory.CreateBlock((level.type)curentlevel[l, k], k* 59, l*64, GraphicsDevice, Blocktexture));
                 }

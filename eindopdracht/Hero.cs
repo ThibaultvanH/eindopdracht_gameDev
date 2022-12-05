@@ -1,4 +1,5 @@
 ﻿using eindopdracht.animation;
+using eindopdracht.blocks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,13 +27,14 @@ enum Activity
 
 namespace eindopdracht
 {
-    internal class Hero : IGameObject, IMovable
+    class Hero : IGameObject, IMovable 
     {
         Texture2D heroTexture;
         Animatie animatie;
         private Vector2 positie;
         private int height = 50;
         private Vector2 snelheid = new Vector2(1,1);
+        public Vector2 velocity = new Vector2();
         private SpriteEffects SpriteDirection;
         private MovementManager movementManager;
         private Vector2 oldpos;
@@ -40,7 +43,8 @@ namespace eindopdracht
         public Rectangle blokrec = new Rectangle(0, 0, 50, 50);
         public Rectangle feet = new Rectangle(0, 0, 30, 5);
         public Rectangle body = new Rectangle(0, 0, 30, 5);
-        public bool isFaling = true;
+        public bool istouchingground = false;
+
         
 
 
@@ -68,7 +72,7 @@ namespace eindopdracht
 
         Vector2 IMovable.Position { get => positie; set => positie = value; }
         Vector2 IMovable.Speed { get => snelheid; set => snelheid = value; }
-
+        Vector2 IMovable.veloCity { get => velocity; set => velocity = value; }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -78,7 +82,7 @@ namespace eindopdracht
             {
                 case Activity.running:
 
-                    height = 46;
+                    
                     feet = new Rectangle((int)positie.X, (int)positie.Y+ height, 40, 2);
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 40, height);                    
                     spriteBatch.Draw(Bloktexture, new Vector2(positie.X , positie.Y +10), blokrec, Color.White);
@@ -87,7 +91,7 @@ namespace eindopdracht
 
                 case Activity.standing:
 
-                    height = 50;
+                    
                     feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
 
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 25, height);
@@ -100,7 +104,7 @@ namespace eindopdracht
 
                 case Activity.crouching:
 
-                    height = 46;
+                    
                     feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 34, height);
                     spriteBatch.Draw(Bloktexture, new Vector2(positie.X +5, positie.Y + 17), blokrec, Color.White);
@@ -109,7 +113,7 @@ namespace eindopdracht
 
                 case Activity.fighting:
 
-                    height = 46;
+                    
                     feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, height);
                     spriteBatch.Draw(Bloktexture, new Vector2(positie.X + 10, positie.Y + 2), blokrec, Color.White);
@@ -119,7 +123,7 @@ namespace eindopdracht
                 case Activity.faling:
 
 
-                    height = 46;
+                    
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, height);
                     feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
                     spriteBatch.Draw(Bloktexture, new Vector2(positie.X + 10, positie.Y + 2), blokrec, Color.White);
@@ -136,13 +140,32 @@ namespace eindopdracht
 
         public void Update(GameTime gameTime)
         {
+            KeyboardState state = Keyboard.GetState();
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (activity != Activity.crouching )
             Move();
-            if (isFaling && activity != Activity.crouching)
+            if (isTouchingGround())
             {
-                positie.Y += 2;
-                Debug.WriteLine(isFaling);
+                velocity.Y = 0;
+                if (state.IsKeyDown(Keys.Up))
+                {
+                    velocity.Y -= 500;
+                    
+
+                }
             }
+            else
+            {
+                
+                velocity.Y += 15 ;
+            
+            }
+           positie.Y += snelheid.Y * velocity.Y * dt;
+
+
+            
+            
+            
             activitys(gameTime);
             
 
@@ -181,12 +204,28 @@ namespace eindopdracht
             {
                 activity = Activity.fighting; 
             }
-            if (isFaling) activity = Activity.faling;
+            if (!isTouchingGround())
+            {
+                activity = Activity.faling;
+            }
+            
             
         }
 
+        private bool isTouchingGround()
+        {
 
-}
+
+
+            return positie.Y + height > 6 * 64;
+            
+
+
+
+        }
+
+       
+    }
 
 
 }

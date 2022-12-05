@@ -12,8 +12,10 @@ namespace eindopdracht
         
             public Vector2 Position { get; set; }
             public Vector2 Speed { get; set; }
-            
-        
+
+            public Vector2 veloCity { get; set; }
+
+
 
     }
 }
