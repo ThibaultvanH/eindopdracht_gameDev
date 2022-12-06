@@ -27,7 +27,7 @@ enum Activity
 
 namespace eindopdracht
 {
-    class Hero : IGameObject, IMovable 
+    class Hero : person, IMovable 
     {
         Texture2D heroTexture;
         Animatie animatie;
@@ -39,19 +39,14 @@ namespace eindopdracht
         public Vector2 velocity = new Vector2();
 
 
-        private SpriteEffects SpriteDirection;
+        
         private MovementManager movementManager;
-        private Vector2 oldpos;
+        
         private Activity activity;
         private Texture2D Bloktexture;
         
-        private int height = 50;
-        public Rectangle blokrec = new Rectangle(0, 0, 50, 50);
-        public Rectangle feet = new Rectangle(0, 0, 30, 5);
-        public Rectangle body = new Rectangle(0, 0, 30, 5);
-        public Rectangle fist = new Rectangle(0, 0, 5, 15);
-        public Rectangle head = new Rectangle(0, 0, 5, 15);
-        public bool isheadtouching = false;
+        
+        
 
 
         public Hero(Texture2D texture, Texture2D bloktexture)
@@ -78,7 +73,7 @@ namespace eindopdracht
         Vector2 IMovable.Speed { get => snelheid; set => snelheid = value; }
         Vector2 IMovable.veloCity { get => velocity; set => velocity = value; }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             
 
@@ -87,7 +82,7 @@ namespace eindopdracht
                 case Activity.running:
 
                     
-                    feet = new Rectangle((int)positie.X, (int)positie.Y+ height, 40, 2);
+                    
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 40, height);                    
                     
                     body = animatie.CurrentFrame.SourceRectangle;
@@ -96,7 +91,7 @@ namespace eindopdracht
                 case Activity.standing:
 
                     
-                    feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
+                    
 
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 25, height);
                     
@@ -109,7 +104,7 @@ namespace eindopdracht
                 case Activity.crouching:
 
                     
-                    feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
+                    
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 34, height);
                     
                     body = new Rectangle(46, 0, 48, 50);
@@ -118,7 +113,7 @@ namespace eindopdracht
                 case Activity.fighting:
 
                     
-                    feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
+                    
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, height);
                     fist = new Rectangle((int)positie.X+330, (int)positie.Y + 10, 10, 50);
                     if (SpriteDirection == SpriteEffects.FlipHorizontally)
@@ -142,7 +137,7 @@ namespace eindopdracht
 
                     
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, height);
-                    feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
+                    
                     
                     body = new Rectangle(92, 50, 48, 50);
                     break;
@@ -155,11 +150,13 @@ namespace eindopdracht
 
         }
 
-        public void Update(GameTime gameTime)
+        
+        public override void Update(GameTime gameTime)
         {
             KeyboardState state = Keyboard.GetState();
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             head = new Rectangle((int)positie.X, (int)positie.Y , 10, 50);
+            feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
             if (activity != Activity.crouching )Move();
             
             if (isTouchingGround())
@@ -187,7 +184,8 @@ namespace eindopdracht
            positie.Y += snelheid.Y * velocity.Y * dt;
             activitys(gameTime);
         }
-        private void Move()
+        
+        public override void Move()
         {
             movementManager.Move(this);
         }
@@ -228,33 +226,7 @@ namespace eindopdracht
             
         }
 
-        private bool isTouchingGround()
-        {
-            foreach (var item in Game1.grassup)
-            {                              
-                if (item.Intersects(feet))
-                {                    
-                        return true;
-                }
-            }
-
-            return false;
-
-        }
-        private bool headTouchingGround()
-        {
-            foreach (var item in Game1.grassdown)
-            {
-                if (item.Intersects(head))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-
-        }
-
+       
     }
 
 
