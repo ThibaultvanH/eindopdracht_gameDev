@@ -15,7 +15,8 @@ namespace eindopdracht
 
             public Vector2 veloCity { get; set; }
 
-
+            public bool Left { get; set; }
+            public bool Right { get; set; }
 
     }
 }

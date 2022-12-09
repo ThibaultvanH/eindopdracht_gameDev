@@ -50,6 +50,31 @@ namespace eindopdracht
 
         }
 
+        public bool istouchingright()
+        {
+            foreach (var item in Game1.grassright)
+            {
+                if (item.Intersects(blokrec))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        public bool istouchingleft()
+        {
+            foreach (var item in Game1.grassleft)
+            {
+                if (item.Intersects(blokrec))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         abstract public void Update(GameTime gameTime);
 
         abstract public void Draw(SpriteBatch spriteBatch);

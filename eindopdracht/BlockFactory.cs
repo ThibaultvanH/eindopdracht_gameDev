@@ -24,6 +24,8 @@ namespace eindopdracht
                 newBlock = new GrassBlock(x, y, graphics, blocktexture);
                 Game1.grassdown.Add(newBlock.HitBoxdown);
                 Game1.grassup.Add(newBlock.HitBoxup);
+                Game1.grassright.Add(newBlock.HitBoxright);
+                Game1.grassleft.Add(newBlock.HitBoxleft);
             }
             if (type == level.type.waterBlock)
             {

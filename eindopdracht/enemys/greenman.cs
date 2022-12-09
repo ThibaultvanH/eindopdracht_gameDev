@@ -1,4 +1,5 @@
-﻿using eindopdracht.animation;
+﻿using eindopdracht;
+using eindopdracht.animation;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX.Direct3D9;
@@ -11,28 +12,51 @@ using System.Threading.Tasks;
 
 namespace eindopdracht.enemys
 {
+
+    enum Activity
+    {
+        walking,
+        standing,
+        fighting,
+        hurt
+    }
      class greenman : person
     {
 
         Animatie walking;
+        Animatie fighting;
         Texture2D greenmanTexture;
-        
+        private Activity activity;
+
         private Vector2 positie = new Vector2(50, 50);
         private Vector2 snelheid = new Vector2(1.2f, 1.2f);
         private Vector2 velocity = new Vector2();
         private Rectangle going = new Rectangle(0,0,10,10);
+        private Rectangle bat = new Rectangle(0,0,10,10);
         private bool goingright = true;
-        public greenman(Texture2D greenmanTexture)
+        Hero hero;
+        public greenman(Texture2D greenmanTexture, Hero hero)
         {
             walking = new Animatie();
-
             walking.AddFrame(new AnimationFrame(new Rectangle(0, 0, 44, 35)));
             walking.AddFrame(new AnimationFrame(new Rectangle(46, 0, 44, 35)));
             walking.AddFrame(new AnimationFrame(new Rectangle(94, 0, 44, 35)));
             walking.AddFrame(new AnimationFrame(new Rectangle(142, 0, 44, 35)));
             walking.AddFrame(new AnimationFrame(new Rectangle(190, 0, 44, 35)));
+
+            fighting = new Animatie();
+            fighting.AddFrame(new AnimationFrame(new Rectangle(0, 112, 44, 35)));
+            fighting.AddFrame(new AnimationFrame(new Rectangle(46, 112, 44, 35)));
+            fighting.AddFrame(new AnimationFrame(new Rectangle(94, 112, 44, 35)));
+            fighting.AddFrame(new AnimationFrame(new Rectangle(142, 112, 44, 35)));
+            fighting.AddFrame(new AnimationFrame(new Rectangle(190, 112, 44, 35)));
+            fighting.AddFrame(new AnimationFrame(new Rectangle(236, 112, 44, 35)));
+            
+
+            health = 100;
             
             this.greenmanTexture = greenmanTexture;
+            this.hero = hero;
             
         }
         
@@ -42,7 +66,8 @@ namespace eindopdracht.enemys
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             head = new Rectangle((int)positie.X, (int)positie.Y, 10, 50);
             feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
-            
+            blokrec = new Rectangle((int)positie.X, (int)positie.Y, 44, height);
+
             if (isTouchingGround())
             {
                 velocity.Y = 0;
@@ -53,61 +78,139 @@ namespace eindopdracht.enemys
                 velocity.Y += 12;
             }
             positie.Y += snelheid.Y * velocity.Y * dt;
-            walkingdirection();
+            walkingdirection(gameTime);
             Move();
-            walking.Update(gameTime);
+            checkhits();
+            fight();
+            fighting.Update(gameTime);
+            
         }
 
-        private void walkingdirection()
+        private void fight()
         {
-            going = new Rectangle((int)positie.X + 30, (int)positie.Y + height, 30, 15);
+            if (GetDistance((double)hero.positie.X, (double)hero.positie.Y, (double)positie.X, (double)positie.Y) <= 50)
+            {
+                
+                activity = Activity.fighting;
+                bat = new Rectangle(0, 0, 0, 0);
+            }
+        }
+
+        private void checkhits()
+        {
+           
+            if (hero.fist.Intersects(blokrec))
+            {
+                Debug.WriteLine(health);
+                hero.fist = new Rectangle(0,0,0,0);
+                health--;
+                activity = Activity.hurt;
+            }
+
+            if (bat.Intersects(hero.blokrec))
+            {
+                Debug.WriteLine("dead");
+            }
+            
+        }
+
+        private static double GetDistance(double x1, double y1, double x2, double y2)
+        {
+            return Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2));
+        }
+
+        private void walkingdirection(GameTime gameTime)
+        {
+            going = new Rectangle((int)positie.X + 25, (int)positie.Y + height, 30, 15);
             if (oldpos.X < positie.X)
             {
                 SpriteDirection = SpriteEffects.None;
-                
+                walking.Update(gameTime);
+                activity = Activity.walking;
+
             }
             else if (oldpos.X > positie.X)
             {
                 SpriteDirection = SpriteEffects.FlipHorizontally;
                 going = new Rectangle((int)positie.X -40, (int)positie.Y + height, 30, 15);
+                walking.Update(gameTime);
+                activity = Activity.walking;
+            }
+            else
+            {
+                activity = Activity.standing;
             }
             oldpos.X = positie.X;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            body = walking.CurrentFrame.SourceRectangle;
+            switch (activity)
+            {
+                case Activity.walking:
+                    body = walking.CurrentFrame.SourceRectangle;
+                    break;
+                case Activity.standing:
+                    body = new Rectangle(0, 112, 44, 55);
+                    break;
+                case Activity.fighting:
+                    bat = new Rectangle((int)positie.X, (int)positie.Y, 10, height);
+                    body = fighting.CurrentFrame.SourceRectangle;
+                    break;
+                case Activity.hurt:
+                    body = new Rectangle(44, 72, 44, 55);
+                    break;
+                default:
+                    break;
+            }
+            
             spriteBatch.Draw(greenmanTexture, positie, body, Color.White, 0, new Vector2(0, 0), 1.2f, SpriteDirection, 1);
         }
 
         public override void Move()
         {
-            
-            if (!onplatform())
-            {
-                goingright = !goingright;
-                going = new Rectangle((int)positie.X - 40, (int)positie.Y + height, 30, 15);
-            }
+
+
             if (onplatform())
             {
-                if (goingright)
+
+                if (GetDistance((double)hero.positie.X, (double)hero.positie.Y, (double)positie.X, (double)positie.Y) <= 200)
                 {
-                    positie.X += snelheid.X;
-                }
-                else
-                {
-                    positie.X -= snelheid.X;
+                    if (hero.positie.X > positie.X+5)
+                    {
+                        positie.X += snelheid.X;
+                        goingright = true;
+                    }
+                    else if (hero.positie.X < positie.X-5)
+                    {
+                        positie.X -= snelheid.X;
+                        goingright = false;
+                    }
+
                 }
             }
-            Debug.WriteLine("plat:");
-            Debug.WriteLine(onplatform());
-            Debug.WriteLine("dir:");
-            Debug.WriteLine(goingright);
+            else
+            {
+                if (GetDistance((double)hero.positie.X, (double)hero.positie.Y, (double)positie.X, (double)positie.Y) <= 200)
+                {
+                    if (hero.positie.X > positie.X && !goingright)
+                    {
+                        positie.X += snelheid.X;
+                    }
+                    else if (hero.positie.X < positie.X)
+                    {
+                        positie.X -= snelheid.X;
+                    }
+
+                }
+            }
 
 
 
         }
-        public bool onplatform()
+        
+
+            public bool onplatform()
         {
            foreach (var item in Game1.grassup)
             {

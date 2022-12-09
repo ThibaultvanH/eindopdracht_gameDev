@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SharpDX.Direct3D9;
+using SharpDX.MediaFoundation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,27 +28,21 @@ enum Activity
 
 namespace eindopdracht
 {
-    class Hero : person, IMovable 
+    class Hero : person, IMovable
     {
         Texture2D heroTexture;
         Animatie animatie;
-        private Vector2 positie;
-        
+        MovementManager movementManager;
 
-
-        private Vector2 snelheid = new Vector2(1.2f,1.2f);
+        public Vector2 positie;
+        private Vector2 snelheid = new Vector2(1.2f, 1.2f);
         public Vector2 velocity = new Vector2();
 
-
-        
-        private MovementManager movementManager;
-        
         private Activity activity;
         private Texture2D Bloktexture;
-        
-        
-        
 
+        private bool left = false;
+        private bool right = false;
 
         public Hero(Texture2D texture, Texture2D bloktexture)
         {
@@ -56,7 +51,7 @@ namespace eindopdracht
 
 
             animatie = new Animatie();
-            positie = new Vector2(0, 200);
+            positie = new Vector2(200, 200);
             movementManager = new MovementManager();
 
             animatie.AddFrame(new AnimationFrame(new Rectangle(0, 150, 48, 50)));
@@ -72,29 +67,30 @@ namespace eindopdracht
         Vector2 IMovable.Position { get => positie; set => positie = value; }
         Vector2 IMovable.Speed { get => snelheid; set => snelheid = value; }
         Vector2 IMovable.veloCity { get => velocity; set => velocity = value; }
+        
+
+        bool IMovable.Right { get => right; set => right = value; }
+        bool IMovable.Left { get => left; set => left = value ; }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            
+
 
             switch (activity)
             {
                 case Activity.running:
 
-                    
-                    
-                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 40, height);                    
-                    
+
+
+                    blokrec = new Rectangle((int)positie.X , (int)positie.Y, 40, height);
+
                     body = animatie.CurrentFrame.SourceRectangle;
                     break;
 
                 case Activity.standing:
 
-                    
-                    
+                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 40, height);
 
-                    blokrec = new Rectangle((int)positie.X, (int)positie.Y, 25, height);
-                    
                     body = new Rectangle(0, 0, 48, 50);
                     break;
 
@@ -103,62 +99,58 @@ namespace eindopdracht
 
                 case Activity.crouching:
 
-                    
-                    
+
+
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 34, height);
-                    
+
                     body = new Rectangle(46, 0, 48, 50);
                     break;
 
                 case Activity.fighting:
 
-                    
-                    
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, height);
-                    fist = new Rectangle((int)positie.X+330, (int)positie.Y + 10, 10, 50);
+                    
                     if (SpriteDirection == SpriteEffects.FlipHorizontally)
                     {
-                        spriteBatch.Draw(Bloktexture, new Vector2(positie.X , positie.Y + 2), fist, Color.Yellow);
+                       
+                        fist = new Rectangle((int)positie.X , (int)positie.Y + 2, 10, 50);
                     }
                     else
                     {
-                        spriteBatch.Draw(Bloktexture, new Vector2(positie.X + 40, positie.Y + 2), fist, Color.Yellow);
+                        fist = new Rectangle((int)positie.X + 40, (int)positie.Y + 10, 10, 50);
+                       
                     }
-                    
-                    
-                    
 
-                   
                     body = new Rectangle(138, 0, 48, 50);
                     break;
 
                 case Activity.faling:
 
 
-                    
+
                     blokrec = new Rectangle((int)positie.X, (int)positie.Y, 32, height);
-                    
-                    
+
                     body = new Rectangle(92, 50, 48, 50);
                     break;
 
                 default:
-                    
+
                     break;
             }
+
             spriteBatch.Draw(heroTexture, positie, body, Color.White, 0, new Vector2(0, 0), 1, SpriteDirection, 1);
 
         }
 
-        
+
         public override void Update(GameTime gameTime)
         {
             KeyboardState state = Keyboard.GetState();
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            head = new Rectangle((int)positie.X, (int)positie.Y , 10, 50);
+            head = new Rectangle((int)positie.X, (int)positie.Y, 10, 50);
             feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
-            if (activity != Activity.crouching )Move();
-            
+            if (activity != Activity.crouching) Move();
+
             if (isTouchingGround())
             {
                 velocity.Y = 0;
@@ -168,25 +160,45 @@ namespace eindopdracht
                     velocity.Y -= 400;
                 }
             }
-            else if(headTouchingGround() && isheadtouching == false)
+            else if (headTouchingGround() && isheadtouching == false)
             {
                 if (velocity.Y < 0)
                 {
                     velocity.Y = 0;
                 }
-                
+
                 isheadtouching = true;
             }
             else
-            {                
-                velocity.Y += 12 ;
+            {
+                velocity.Y += 12;
             }
-           positie.Y += snelheid.Y * velocity.Y * dt;
+            positie.Y += snelheid.Y * velocity.Y * dt;
             activitys(gameTime);
         }
-        
+
         public override void Move()
         {
+
+            if (istouchingleft())
+            {
+                left = true;
+            }
+            else
+            {
+                left = false;
+            }
+
+            if (istouchingright()) 
+            {
+                right = true;
+            }
+            else
+            {
+                right = false;
+            }
+            
+
             movementManager.Move(this);
         }
         private void activitys(GameTime gameTime)
@@ -202,13 +214,14 @@ namespace eindopdracht
                 SpriteDirection = SpriteEffects.FlipHorizontally;
                 animatie.Update(gameTime);
                 activity = Activity.running;
-            } else if (oldpos.X == positie.X)
+            }
+            else if (oldpos.X == positie.X)
             {
                 activity = Activity.standing;
             }
 
             oldpos.X = positie.X;
-        
+
             KeyboardState state = Keyboard.GetState();
             if (state.IsKeyDown(Keys.Down))
             {
@@ -216,17 +229,17 @@ namespace eindopdracht
             }
             if (state.IsKeyDown(Keys.Space))
             {
-                activity = Activity.fighting; 
+                activity = Activity.fighting;
             }
             if (!isTouchingGround())
             {
                 activity = Activity.faling;
             }
-            
-            
+
+
         }
 
-       
+
     }
 
 

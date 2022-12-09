@@ -7,6 +7,7 @@ using System.Linq;
 
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace eindopdracht
 {
@@ -19,16 +20,18 @@ namespace eindopdracht
 
             var direction = Vector2.Zero;
             
-            if (state.IsKeyDown(Keys.Left) && movable.Position.X > 0)
+            if (state.IsKeyDown(Keys.Left) && movable.Position.X > 0 && !movable.Left )
             {
                 direction.X -= 1;
                 
             }
-            if (state.IsKeyDown(Keys.Right) && movable.Position.X + 48 < 800)
+            if (state.IsKeyDown(Keys.Right) && movable.Position.X + 48 < 800 && !movable.Right)
             {
                 direction.X += 1;
                 
             }
+
+
             if (state.IsKeyDown(Keys.Up))
             {
                 if (upkeyisup)
