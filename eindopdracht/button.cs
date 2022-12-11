@@ -86,8 +86,9 @@ namespace eindopdracht
 
                     if (_currentMouse.LeftButton == ButtonState.Released && _previousMouse.LeftButton == ButtonState.Pressed)
                     {
-                    Game1.Gamestate = GameState.level1;
-                    }
+                    
+                    Click?.Invoke(this, new EventArgs());
+                }
                 }
             }
 

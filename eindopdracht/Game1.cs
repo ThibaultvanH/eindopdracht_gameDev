@@ -15,7 +15,8 @@ namespace eindopdracht
     Menu,
     level1,
     level2,
-    gameover   
+    gameover,
+    exit   
     }
 
     internal class Game1 : Game
@@ -37,13 +38,15 @@ namespace eindopdracht
         private Texture2D greenmantexture;
 
 
-        int[,] curentlevel = level.level1;
+        public static int[,] curentlevel = level.level1;
         public static GameState Gamestate = GameState.Menu;
         
         BlockFactory blockFactory = new BlockFactory();
         Hero hero;
         greenman greenman1;
-        Button button;
+        menu menu;
+        
+        
    
 
         public Game1()
@@ -54,14 +57,13 @@ namespace eindopdracht
             IsMouseVisible = true;
         }
 
-        protected override void Initialize()
+        protected override void Initialize()    
         {
             // TODO: Add your initialization logic here
 
             loadBG();
             loadMenu();
             loadGame();
-
             base.Initialize();
 
         }
@@ -73,12 +75,7 @@ namespace eindopdracht
 
         private void loadMenu()
         {
-            button = new Button(Content.Load<Texture2D>("Control/wooden"), Content.Load<SpriteFont>("font/newfont"))
-            {
-                
-                Text = "Start Game",
-            }; 
-            button.Position = new Vector2((GraphicsDevice.Viewport.Width - button.texture.Width) / 2, 150);
+            menu = new menu(Content.Load<Texture2D>("control/wooden"), Content.Load<SpriteFont>("font/newfont"), GraphicsDevice.Viewport,this);
         }
 
         private void loadGame()
@@ -119,11 +116,11 @@ namespace eindopdracht
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            
             switch (Gamestate)
             {
                 case GameState.Menu:
-                    button?.Update(gameTime);
+                    menu.Update(gameTime);
 
                     break;
 
@@ -141,6 +138,9 @@ namespace eindopdracht
 
                 case GameState.gameover:
                     break;
+                case GameState.exit:
+                    Exit();
+                    break;
                 default:
                     break;
             }
@@ -156,7 +156,7 @@ namespace eindopdracht
             switch (Gamestate)
             {
                 case GameState.Menu:
-                    button.Draw(gameTime, _spriteBatch);
+                    menu.Draw( gameTime, _spriteBatch);
                     break;
 
 
@@ -175,13 +175,15 @@ namespace eindopdracht
                 case GameState.gameover:
                     break;
                 default:
+                    
                     break;
             }
             _spriteBatch.End();
             base.Draw(gameTime);
         }
+        
 
-        private void CreateBlocks()
+        public void CreateBlocks()
         {
             for (int l = 0; l < curentlevel.GetLength(0); l++)
             {
