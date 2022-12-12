@@ -13,7 +13,7 @@ namespace eindopdracht.animation
 
         private List<AnimationFrame> frames;
 
-        private int counter;
+        public int counter;
 
         public Animatie()
         {
@@ -26,7 +26,7 @@ namespace eindopdracht.animation
             frames.Add(animationFrame);
             CurrentFrame = frames[0];
         }
-        private double secondCounter = 0;
+        public double secondCounter = 0;
 
         public void Update(GameTime gameTime)
         {

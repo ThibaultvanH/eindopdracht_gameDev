@@ -42,9 +42,16 @@ namespace eindopdracht
 
             public string Text { get; set; }
 
-            
+        public Button(Texture2D Texture)
+        {
+            texture = Texture;
 
-            public Button(Texture2D Texture, SpriteFont font)
+            _font = null;
+
+            PenColour = Color.White;
+        }
+
+        public Button(Texture2D Texture, SpriteFont font)
             {
                 texture = Texture;
 

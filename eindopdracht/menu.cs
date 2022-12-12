@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using eindopdracht.levels;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -56,15 +57,15 @@ namespace eindopdracht
 
         public void level1(object sender, System.EventArgs e)
         {
-            Game1.curentlevel = level.level1;
+            
             Game1.Gamestate = GameState.level1;
-            game.CreateBlocks();
+            game.loadlevel1();
         }
         public void level2(object sender, System.EventArgs e)
         {
-            Game1.curentlevel = level.level2;
+            
             Game1.Gamestate = GameState.level2;
-            game.CreateBlocks();
+            game.loadlevel2();
             
         }
         public void exit(object sender, System.EventArgs e)

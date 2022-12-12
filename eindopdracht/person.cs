@@ -22,7 +22,7 @@ namespace eindopdracht
         public int height = 50;
         public SpriteEffects SpriteDirection;
         public Vector2 oldpos;
-
+        public bool isHit = false;
         public bool isTouchingGround()
         {
             foreach (var item in Game1.grassup)

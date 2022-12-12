@@ -37,17 +37,17 @@ namespace eindopdracht
         public Vector2 positie;
         private Vector2 snelheid = new Vector2(1.2f, 1.2f);
         public Vector2 velocity = new Vector2();
-
+        
         private Activity activity;
-        private Texture2D Bloktexture;
+        
 
         private bool left = false;
         private bool right = false;
 
-        public Hero(Texture2D texture, Texture2D bloktexture)
+        public Hero(Texture2D texture)
         {
             heroTexture = texture;
-            Bloktexture = bloktexture;
+            
 
 
             animatie = new Animatie();
@@ -155,9 +155,10 @@ namespace eindopdracht
             {
                 velocity.Y = 0;
                 isheadtouching = false;
-                if (state.IsKeyDown(Keys.Up))
+                if (state.IsKeyDown(Keys.Up) || isHit)
                 {
                     velocity.Y -= 400;
+                    isHit = false;
                 }
             }
             else if (headTouchingGround() && isheadtouching == false)

@@ -1,5 +1,6 @@
 ﻿using eindopdracht.blocks;
 using eindopdracht.enemys;
+using eindopdracht.levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -31,20 +32,20 @@ namespace eindopdracht
         public static List<Rectangle> grassleft = new List<Rectangle>();
         public static List<Block> blocks = new List<Block>();
 
-        private Texture2D texture;
-        private Texture2D bloktexture;
-        private Texture2D Blocktexture;
+        private Texture2D HeroTexture;
+        private Texture2D buttonTexture;
+        private Texture2D BlockTexture;
         private Texture2D BG;
-        private Texture2D greenmantexture;
+        private Texture2D GreenmanTexture;
 
-
-        public static int[,] curentlevel = level.level1;
+        
+        public static int[,] curentlevel;
         public static GameState Gamestate = GameState.Menu;
         
-        BlockFactory blockFactory = new BlockFactory();
-        Hero hero;
-        greenman greenman1;
+        
+        level level;
         menu menu;
+        
         
         
    
@@ -63,7 +64,7 @@ namespace eindopdracht
 
             loadBG();
             loadMenu();
-            loadGame();
+            
             base.Initialize();
 
         }
@@ -78,37 +79,31 @@ namespace eindopdracht
             menu = new menu(Content.Load<Texture2D>("control/wooden"), Content.Load<SpriteFont>("font/newfont"), GraphicsDevice.Viewport,this);
         }
 
-        private void loadGame()
+        public void loadlevel1()
         {
             loadTextures();
-            InitializeGameObjects();
+            level = new level1(HeroTexture, BlockTexture, buttonTexture, GreenmanTexture, GraphicsDevice);
+        }
+        public void loadlevel2()
+        {
+            loadTextures();
+            level = new level2(HeroTexture, BlockTexture, buttonTexture, GreenmanTexture, GraphicsDevice);
         }
 
         private void loadTextures()
         {
-            texture = Content.Load<Texture2D>("hero");
-            bloktexture = new Texture2D(GraphicsDevice, 1, 1);
-            bloktexture.SetData(new Color[] { Color.DarkSlateGray });
-            Blocktexture = Content.Load<Texture2D>("Tile-svg3");
-            
-            greenmantexture = Content.Load<Texture2D>("Walk");
-            
+            HeroTexture = Content.Load<Texture2D>("hero");
+            BlockTexture = Content.Load<Texture2D>("Tile-svg3");
+            GreenmanTexture = Content.Load<Texture2D>("Walk");
+            buttonTexture = Content.Load<Texture2D>("control/menu");
         }
 
-        private void InitializeGameObjects()
-        {
-            hero = new Hero(texture, bloktexture);
-            greenman1 = new greenman(greenmantexture, hero);
-            CreateBlocks();
-        }
+
 
         protected override void LoadContent()
         {
-            
-
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            // TODO: use this.Content to load your game content here
-            
+            // TODO: use this.Content to load your game content here 
         }
 
 
@@ -126,13 +121,18 @@ namespace eindopdracht
 
 
                 case GameState.level1:
+                    
                 case GameState.level2:
+                    /*
                     if (greenman1?.health < 0)
                     {
                         greenman1 = null;
                     }
                     hero.Update(gameTime);
                     greenman1?.Update(gameTime);
+                    menubutton?.Update(gameTime);
+                    */
+                    level.Update(gameTime);
                     break;
 
 
@@ -162,13 +162,13 @@ namespace eindopdracht
 
                 case GameState.level1:
                 case GameState.level2:
-                    
+                    /*
                     hero.Draw(_spriteBatch);
                     greenman1?.Draw(_spriteBatch);
-                    foreach (Block block in blocks)
-                    {
-                        block?.Draw(_spriteBatch);
-                    }
+                    menubutton.Draw(gameTime,_spriteBatch);
+                    */
+                    level.Draw(gameTime, _spriteBatch);
+                    
                     break;
 
 
@@ -183,18 +183,7 @@ namespace eindopdracht
         }
         
 
-        public void CreateBlocks()
-        {
-            for (int l = 0; l < curentlevel.GetLength(0); l++)
-            {
-                for (int k = 0; k < curentlevel.GetLength(1); k++)
-                {
-
-                    
-                    blocks.Add(blockFactory.CreateBlock((level.type)curentlevel[l, k], k* 59, l*64, GraphicsDevice, Blocktexture));
-                }
-            }
-        }
+        
 
 
     }

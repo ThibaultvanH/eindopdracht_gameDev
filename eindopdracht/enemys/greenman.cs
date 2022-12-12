@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace eindopdracht.enemys
 {
@@ -27,6 +28,8 @@ namespace eindopdracht.enemys
         Animatie fighting;
         Texture2D greenmanTexture;
         private Activity activity;
+        double cooldownCounter = 0;
+        double fightingcooldown = 0;
 
         private Vector2 positie = new Vector2(50, 50);
         private Vector2 snelheid = new Vector2(1.2f, 1.2f);
@@ -72,6 +75,12 @@ namespace eindopdracht.enemys
             {
                 velocity.Y = 0;
                 isheadtouching = false;
+                if (isHit)
+                {
+                    velocity.Y -= 300;
+                     isHit = false;
+
+                }
             }
             else
             {
@@ -83,7 +92,9 @@ namespace eindopdracht.enemys
             checkhits();
             fight();
             fighting.Update(gameTime);
-            
+            cooldownCounter += gameTime.ElapsedGameTime.TotalMilliseconds;
+            fightingcooldown += gameTime.ElapsedGameTime.TotalMilliseconds;
+
         }
 
         private void fight()
@@ -91,26 +102,55 @@ namespace eindopdracht.enemys
             if (GetDistance((double)hero.positie.X, (double)hero.positie.Y, (double)positie.X, (double)positie.Y) <= 50)
             {
                 
-                activity = Activity.fighting;
-                bat = new Rectangle(0, 0, 0, 0);
+
+                if (fighting.counter != 0)
+                {
+                    activity = Activity.fighting;
+                    bat = new Rectangle((int)positie.X, (int)positie.Y, 10, height);
+                }
+                else
+                {
+                    fighting.counter = 0;
+                    fighting.secondCounter = 0;
+                    bat = new Rectangle(-200, 0, 0, 0);
+                    if (cooldownCounter >= 4000) // 1000 milliseconds = 1 second
+                    {
+                        fighting.counter = 1;
+                        cooldownCounter = 0;
+                    }
+                }
+
+                    
+                
             }
         }
 
         private void checkhits()
         {
-           
-            if (hero.fist.Intersects(blokrec))
+            if (fightingcooldown >= 200)
             {
-                Debug.WriteLine(health);
-                hero.fist = new Rectangle(0,0,0,0);
-                health--;
-                activity = Activity.hurt;
-            }
 
-            if (bat.Intersects(hero.blokrec))
-            {
-                Debug.WriteLine("dead");
+
+
+                if (hero.fist.Intersects(blokrec))
+                {
+
+                    hero.fist = new Rectangle(0, -100, 0, 0);
+                    health--;
+                    isHit = true;
+                    activity = Activity.hurt;
+                }
+
+                if (bat.Intersects(hero.blokrec))
+                {
+                    hero.isHit = true;
+                    bat = new Rectangle(-100, 0, 0, 0);
+                }
+
+                fightingcooldown = 0;
             }
+            
+            
             
         }
 
@@ -143,7 +183,7 @@ namespace eindopdracht.enemys
             oldpos.X = positie.X;
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)     
         {
             switch (activity)
             {
@@ -154,11 +194,11 @@ namespace eindopdracht.enemys
                     body = new Rectangle(0, 112, 44, 55);
                     break;
                 case Activity.fighting:
-                    bat = new Rectangle((int)positie.X, (int)positie.Y, 10, height);
+                    
                     body = fighting.CurrentFrame.SourceRectangle;
                     break;
                 case Activity.hurt:
-                    body = new Rectangle(44, 72, 44, 55);
+                    body = new Rectangle(44, 72, 44, 42);
                     break;
                 default:
                     break;
