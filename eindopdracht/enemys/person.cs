@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using eindopdracht.interfaces;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX.MediaFoundation;
 using System;
@@ -7,12 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eindopdracht
+namespace eindopdracht.enemys
 {
     abstract class person : IGameObject
     {
 
-        public int health { get; set; }
+        public int health { get => health1; set => health1 = value; }
         public bool isheadtouching { get; set; }
         public Rectangle blokrec = new Rectangle(0, 0, 50, 50);
         public Rectangle feet = new Rectangle(0, 0, 30, 5);
@@ -23,6 +24,9 @@ namespace eindopdracht
         public SpriteEffects SpriteDirection;
         public Vector2 oldpos;
         public bool isHit = false;
+        private int health1 = 100;
+        public bool dead = false;
+
         public bool isTouchingGround()
         {
             foreach (var item in Game1.grassup)
@@ -80,6 +84,6 @@ namespace eindopdracht
         abstract public void Draw(SpriteBatch spriteBatch);
 
         abstract public void Move();
-        
+
     }
 }

@@ -28,12 +28,17 @@ namespace eindopdracht.levels
         
         public Button menubutton;
 
+        
+
         public Texture2D HeroTexture;
         public Texture2D BlockTexture;
         public Texture2D ButtonTexture;
         public Texture2D GreenmanTexture;
+        public Texture2D ridderTexture;
+        public Texture2D SpikeTexture;
         public GraphicsDevice dev;
         public BlockFactory blockFactory;
+        public SpriteFont font;
 
 
 
@@ -44,13 +49,16 @@ namespace eindopdracht.levels
         public static List<Block> blocks = new List<Block>();
 
 
-        public level(Texture2D HeroTexture, Texture2D blockTexture, Texture2D ButtonTexture, Texture2D GreenmanTexture, GraphicsDevice dev)
+        public level(Texture2D HeroTexture, Texture2D blockTexture, Texture2D ButtonTexture, Texture2D GreenmanTexture,Texture2D RidderTexture,Texture2D SpikeTexture , GraphicsDevice dev , SpriteFont font)
         {
             this.HeroTexture = HeroTexture;
             this.BlockTexture = blockTexture;
             this.ButtonTexture = ButtonTexture;
             this.GreenmanTexture = GreenmanTexture;
+            this.ridderTexture = RidderTexture;
+            this.SpikeTexture = SpikeTexture;
             this.dev = dev;
+            this.font = font;
             InitializeGameObjects();
         }
 
@@ -76,6 +84,11 @@ namespace eindopdracht.levels
         {
             Game1.Gamestate = GameState.Menu;
         }
+        public void Gameover()
+        {
+            
+            Game1.Gamestate = GameState.gameover;
+        }
 
         public void CreateBlocks()
         {
@@ -87,5 +100,7 @@ namespace eindopdracht.levels
                 }
             }
         }
+
+        
     }
 }

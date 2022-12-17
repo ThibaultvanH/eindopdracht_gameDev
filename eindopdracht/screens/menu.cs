@@ -8,7 +8,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eindopdracht
+namespace eindopdracht.screens
 {
     internal class menu
     {
@@ -16,7 +16,7 @@ namespace eindopdracht
         Button level1Button;
         Button level2Button;
         Button ExitGameButton;
-        public menu(Texture2D texture, SpriteFont font, Viewport viewport , Game1 game)
+        public menu(Texture2D texture, SpriteFont font, Viewport viewport, Game1 game)
         {
             this.game = game;
             level1Button = new Button(texture, font)
@@ -55,24 +55,24 @@ namespace eindopdracht
             ExitGameButton.Update(gameTime);
         }
 
-        public void level1(object sender, System.EventArgs e)
+        public void level1(object sender, EventArgs e)
         {
-            
+
             Game1.Gamestate = GameState.level1;
             game.loadlevel1();
         }
-        public void level2(object sender, System.EventArgs e)
+        public void level2(object sender, EventArgs e)
         {
-            
+
             Game1.Gamestate = GameState.level2;
             game.loadlevel2();
-            
+
         }
-        public void exit(object sender, System.EventArgs e)
+        public void exit(object sender, EventArgs e)
         {
-            
+
             Game1.Gamestate = GameState.exit;
-            
+
         }
     }
 }

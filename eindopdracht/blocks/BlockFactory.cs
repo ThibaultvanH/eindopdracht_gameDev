@@ -1,5 +1,4 @@
-﻿using eindopdracht.blocks;
-using eindopdracht.levels;
+﻿using eindopdracht.levels;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eindopdracht
+namespace eindopdracht.blocks
 {
     class BlockFactory
     {
@@ -35,9 +34,9 @@ namespace eindopdracht
 
             if (type == level.type.air)
             {
-                
 
-                
+
+
             }
             return newBlock;
         }

@@ -1,5 +1,7 @@
 ﻿using eindopdracht.animation;
 using eindopdracht.blocks;
+using eindopdracht.enemys;
+using eindopdracht.interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -149,18 +151,30 @@ namespace eindopdracht
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             head = new Rectangle((int)positie.X, (int)positie.Y, 10, 50);
             feet = new Rectangle((int)positie.X, (int)positie.Y + height, 40, 2);
-            if (activity != Activity.crouching) Move();
+            if (velocity.X > 0)
+            {
+                velocity.X -= 1;
+                if (velocity.X < 140)
+                {
+                    velocity.X = 0;
+                }
+            }
+            if (activity != Activity.crouching ) Move();
 
             if (isTouchingGround())
             {
                 velocity.Y = 0;
                 isheadtouching = false;
-                if (state.IsKeyDown(Keys.Up) || isHit)
+                if (state.IsKeyDown(Keys.Up) )
                 {
                     velocity.Y -= 400;
-                    isHit = false;
+                    
+                    
                 }
+                
             }
+            
+
             else if (headTouchingGround() && isheadtouching == false)
             {
                 if (velocity.Y < 0)
@@ -174,7 +188,10 @@ namespace eindopdracht
             {
                 velocity.Y += 12;
             }
+            
+            
             positie.Y += snelheid.Y * velocity.Y * dt;
+            
             activitys(gameTime);
         }
 

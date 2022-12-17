@@ -1,6 +1,7 @@
 ﻿using eindopdracht.blocks;
 using eindopdracht.enemys;
 using eindopdracht.levels;
+using eindopdracht.screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -37,23 +38,22 @@ namespace eindopdracht
         private Texture2D BlockTexture;
         private Texture2D BG;
         private Texture2D GreenmanTexture;
+        private Texture2D ridderTexture;
+        private Texture2D SpikeTexture;
 
         
-        public static int[,] curentlevel;
+        
         public static GameState Gamestate = GameState.Menu;
         
         
         level level;
         menu menu;
+        gameOver gameover;
         
-        
-        
-   
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-            
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -64,7 +64,7 @@ namespace eindopdracht
 
             loadBG();
             loadMenu();
-            
+            loadgameover();
             base.Initialize();
 
         }
@@ -82,12 +82,17 @@ namespace eindopdracht
         public void loadlevel1()
         {
             loadTextures();
-            level = new level1(HeroTexture, BlockTexture, buttonTexture, GreenmanTexture, GraphicsDevice);
+            level = new level1(HeroTexture, BlockTexture, buttonTexture, GreenmanTexture,ridderTexture,SpikeTexture, GraphicsDevice, Content.Load<SpriteFont>("font/newfont"));
         }
         public void loadlevel2()
         {
             loadTextures();
-            level = new level2(HeroTexture, BlockTexture, buttonTexture, GreenmanTexture, GraphicsDevice);
+            level = new level2(HeroTexture, BlockTexture, buttonTexture, GreenmanTexture, ridderTexture,SpikeTexture, GraphicsDevice, Content.Load<SpriteFont>("font/newfont"));
+        }
+
+        public void loadgameover()
+        {
+            gameover = new gameOver(Content.Load<Texture2D>("control/wooden"), Content.Load<SpriteFont>("font/newfont"), GraphicsDevice.Viewport, this);
         }
 
         private void loadTextures()
@@ -96,6 +101,8 @@ namespace eindopdracht
             BlockTexture = Content.Load<Texture2D>("Tile-svg3");
             GreenmanTexture = Content.Load<Texture2D>("Walk");
             buttonTexture = Content.Load<Texture2D>("control/menu");
+            ridderTexture = Content.Load<Texture2D>("Enemy");
+            SpikeTexture = Content.Load<Texture2D>("spike");
         }
 
 
@@ -137,6 +144,7 @@ namespace eindopdracht
 
 
                 case GameState.gameover:
+                    gameover.Update(gameTime);
                     break;
                 case GameState.exit:
                     Exit();
@@ -173,6 +181,7 @@ namespace eindopdracht
 
 
                 case GameState.gameover:
+                    gameover.Draw(gameTime, _spriteBatch);
                     break;
                 default:
                     

@@ -12,7 +12,7 @@ namespace eindopdracht.levels
     internal class level2 : level
     {
         Hero hero;
-        public level2(Texture2D HeroTexture, Texture2D blockTexture, Texture2D ButtonTexture, Texture2D GreenmanTexture, GraphicsDevice dev) : base(HeroTexture, blockTexture, ButtonTexture, GreenmanTexture, dev)
+        public level2(Texture2D HeroTexture, Texture2D blockTexture, Texture2D ButtonTexture, Texture2D GreenmanTexture,Texture2D ridderTexture,Texture2D SpikeTexture, GraphicsDevice dev, SpriteFont font) : base(HeroTexture, blockTexture, ButtonTexture, GreenmanTexture, ridderTexture,SpikeTexture, dev , font)
         {
             Level = new int[,]
     {
