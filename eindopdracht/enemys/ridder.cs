@@ -238,14 +238,14 @@ namespace eindopdracht.enemys
 
                 if (onplatform(goingRight))
                 {
-                    if (hero.positie.X > positie.X)
+                    if (hero.positie.X - 20 > positie.X)
                     {
                         positie.X += snelheid.X;
                     }
                 }
                 if (onplatform(goingLeft))
                 {
-                    if (hero.positie.X < positie.X)
+                    if (hero.positie.X + 10 < positie.X)
                     {
                         positie.X -= snelheid.X;
                     }

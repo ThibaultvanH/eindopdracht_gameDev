@@ -92,6 +92,7 @@ namespace eindopdracht.levels
 
         public void CreateBlocks()
         {
+            blocks = new List<Block>();
             for (int l = 0; l < Level.GetLength(0); l++)
             {
                 for (int k = 0; k < Level.GetLength(1); k++)

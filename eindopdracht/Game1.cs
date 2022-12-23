@@ -46,7 +46,8 @@ namespace eindopdracht
         public static GameState Gamestate = GameState.Menu;
         
         
-        level level;
+        level1 level1;
+        level2 level2;
         menu menu;
         gameOver gameover;
         
@@ -82,16 +83,27 @@ namespace eindopdracht
         public void loadlevel1()
         {
             loadTextures();
-            level = new level1(HeroTexture, BlockTexture, buttonTexture, GreenmanTexture,ridderTexture,SpikeTexture, GraphicsDevice, Content.Load<SpriteFont>("font/newfont"));
+            grassup = new List<Rectangle>();
+            grassdown = new List<Rectangle>();
+            grassright = new List<Rectangle>();
+            grassleft = new List<Rectangle>();
+            level1 = new level1(HeroTexture, BlockTexture, buttonTexture, GreenmanTexture,ridderTexture,SpikeTexture, GraphicsDevice, Content.Load<SpriteFont>("font/newfont"));
+            
         }
         public void loadlevel2()
         {
             loadTextures();
-            level = new level2(HeroTexture, BlockTexture, buttonTexture, GreenmanTexture, ridderTexture,SpikeTexture, GraphicsDevice, Content.Load<SpriteFont>("font/newfont"));
+            grassup = new List<Rectangle>();
+            grassdown = new List<Rectangle>();
+            grassright = new List<Rectangle>();
+            grassleft = new List<Rectangle>();
+            level2 = new level2(HeroTexture, BlockTexture, buttonTexture, GreenmanTexture, ridderTexture,SpikeTexture, GraphicsDevice, Content.Load<SpriteFont>("font/newfont"));
+            
         }
 
         public void loadgameover()
         {
+
             gameover = new gameOver(Content.Load<Texture2D>("control/wooden"), Content.Load<SpriteFont>("font/newfont"), GraphicsDevice.Viewport, this);
         }
 
@@ -128,7 +140,8 @@ namespace eindopdracht
 
 
                 case GameState.level1:
-                    
+                    level1.Update(gameTime);
+                    break;
                 case GameState.level2:
                     /*
                     if (greenman1?.health < 0)
@@ -139,7 +152,7 @@ namespace eindopdracht
                     greenman1?.Update(gameTime);
                     menubutton?.Update(gameTime);
                     */
-                    level.Update(gameTime);
+                    level2.Update(gameTime);
                     break;
 
 
@@ -165,17 +178,20 @@ namespace eindopdracht
             {
                 case GameState.Menu:
                     menu.Draw( gameTime, _spriteBatch);
+                    
                     break;
 
 
                 case GameState.level1:
+                    level1.Draw(gameTime, _spriteBatch);
+                    break;
                 case GameState.level2:
                     /*
                     hero.Draw(_spriteBatch);
                     greenman1?.Draw(_spriteBatch);
                     menubutton.Draw(gameTime,_spriteBatch);
                     */
-                    level.Draw(gameTime, _spriteBatch);
+                    level2.Draw(gameTime, _spriteBatch);
                     
                     break;
 

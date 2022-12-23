@@ -29,13 +29,13 @@ namespace eindopdracht.levels
         Level = new int[,]
         {
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-    { 0,0,0,0,0,0,0,0,1,1,0,0,0,0 },
+    { 0,0,0,0,0,0,0,0,1,1,1,1,1,1 },
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-    { 0,1,1,1,1,0,0,0,0,0,0,0,0,0 },
+    { 1,1,1,1,1,0,0,0,0,0,0,0,0,0 },
     { 0,0,0,0,0,0,0,0,0,1,0,0,0,0 },
     { 0,0,0,0,0,0,0,1,1,2,1,0,0,0 },
-    { 1,1,1,1,1,1,1,2,2,2,2,1,1,1 },
-    { 2,2,2,2,2,2,2,2,2,2,2,2,2,2 }
+    { 1,1,1,1,0,1,1,2,2,2,2,1,1,1 },
+    { 2,2,2,2,1,2,2,2,2,2,2,2,2,2 }
         };
             
             hero = new Hero(HeroTexture);
@@ -44,9 +44,9 @@ namespace eindopdracht.levels
             greenman2 = new greenman(GreenmanTexture, hero);
             greenman2.positie = new Vector2(500, 10);
             greenman3 = new greenman(GreenmanTexture, hero);
-            greenman3.positie = new Vector2(600, 10);
+            greenman3.positie = new Vector2(650, 100);
             ridder1 = new ridder(ridderTexture, hero);
-            ridder1.positie = new Vector2(200, 200);
+            ridder1.positie = new Vector2(200, 000);
             spike1 = new spike(SpikeTexture, hero);
             spike1.position = new Vector2(460, 290);
             persons.Add(greenman1);

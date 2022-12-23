@@ -45,7 +45,7 @@ namespace eindopdracht
                 
                 
             }
-            if (state.IsKeyUp(Keys.Up))
+            if (state.IsKeyUp(Keys.Space))
             {
 
                 upkeyisup = true;

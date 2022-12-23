@@ -165,7 +165,7 @@ namespace eindopdracht
             {
                 velocity.Y = 0;
                 isheadtouching = false;
-                if (state.IsKeyDown(Keys.Up) )
+                if (state.IsKeyDown(Keys.Space) || state.IsKeyDown(Keys.Up ))
                 {
                     velocity.Y -= 400;
                     
@@ -245,7 +245,7 @@ namespace eindopdracht
             {
                 activity = Activity.crouching;
             }
-            if (state.IsKeyDown(Keys.Space))
+            if (state.IsKeyDown(Keys.F))
             {
                 activity = Activity.fighting;
             }
