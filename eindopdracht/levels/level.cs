@@ -27,9 +27,6 @@ namespace eindopdracht.levels
 
         
         public Button menubutton;
-
-        
-
         public Texture2D HeroTexture;
         public Texture2D BlockTexture;
         public Texture2D ButtonTexture;
@@ -40,7 +37,10 @@ namespace eindopdracht.levels
         public BlockFactory blockFactory;
         public SpriteFont font;
 
-
+        public int wave = 0;
+        public String wavestr = "";
+        public double timer = 0;
+        
 
         public static List<Rectangle> grassup = new List<Rectangle>();
         public static List<Rectangle> grassdown = new List<Rectangle>();
