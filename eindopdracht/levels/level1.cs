@@ -145,6 +145,7 @@ namespace eindopdracht.levels
                         wave3();
                         break;
                     case 3:
+                        levelpassed();
                         break;
                     default:
                         break;

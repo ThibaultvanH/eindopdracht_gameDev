@@ -49,16 +49,16 @@ namespace eindopdracht.enemys
 
             fighting = new Animatie();
             fighting.AddFrame(new AnimationFrame(new Rectangle(0, 0, 50, 55)));
-            fighting.AddFrame(new AnimationFrame(new Rectangle(60, 0, 50, 55)));
-            fighting.AddFrame(new AnimationFrame(new Rectangle(120, 0, 50, 55)));
-            fighting.AddFrame(new AnimationFrame(new Rectangle(180, 0, 50, 55)));
+            fighting.AddFrame(new AnimationFrame(new Rectangle(60, 0, 35, 55)));
+            fighting.AddFrame(new AnimationFrame(new Rectangle(100, 0, 50, 55)));
+            fighting.AddFrame(new AnimationFrame(new Rectangle(170, 0, 50, 55)));
 
 
             die = new Animatie();
-            die.AddFrame(new AnimationFrame(new Rectangle(0, 60, 50, 55)));
-            die.AddFrame(new AnimationFrame(new Rectangle(60, 60, 50, 55)));
-            die.AddFrame(new AnimationFrame(new Rectangle(120, 60, 50, 55)));
-            die.AddFrame(new AnimationFrame(new Rectangle(180, 60, 50, 55)));
+            die.AddFrame(new AnimationFrame(new Rectangle(0, 60, 40, 55)));
+            die.AddFrame(new AnimationFrame(new Rectangle(44, 60, 50, 55)));
+            die.AddFrame(new AnimationFrame(new Rectangle(100, 60, 50, 55)));
+            die.AddFrame(new AnimationFrame(new Rectangle(160, 60, 50, 55)));
 
 
             height = 55;

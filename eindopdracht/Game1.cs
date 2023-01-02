@@ -18,6 +18,7 @@ namespace eindopdracht
     level1,
     level2,
     gameover,
+    levelpassed,
     exit   
     }
 
@@ -49,7 +50,7 @@ namespace eindopdracht
         level1 level1;
         level2 level2;
         menu menu;
-        gameOver gameover;
+        Endscreen endscreen;
         
 
         public Game1()
@@ -65,7 +66,7 @@ namespace eindopdracht
 
             loadBG();
             loadMenu();
-            loadgameover();
+            loadendscreen();
             base.Initialize();
 
         }
@@ -101,10 +102,10 @@ namespace eindopdracht
             
         }
 
-        public void loadgameover()
+        public void loadendscreen()
         {
 
-            gameover = new gameOver(Content.Load<Texture2D>("control/wooden"), Content.Load<SpriteFont>("font/newfont"), GraphicsDevice.Viewport, this);
+            endscreen = new Endscreen(Content.Load<Texture2D>("control/wooden"), Content.Load<SpriteFont>("font/newfont"), GraphicsDevice.Viewport, this,"GameOver");
         }
 
         private void loadTextures()
@@ -137,27 +138,20 @@ namespace eindopdracht
                     menu.Update(gameTime);
 
                     break;
-
-
                 case GameState.level1:
                     level1.Update(gameTime);
                     break;
                 case GameState.level2:
-                    /*
-                    if (greenman1?.health < 0)
-                    {
-                        greenman1 = null;
-                    }
-                    hero.Update(gameTime);
-                    greenman1?.Update(gameTime);
-                    menubutton?.Update(gameTime);
-                    */
+                    
                     level2.Update(gameTime);
                     break;
 
 
                 case GameState.gameover:
-                    gameover.Update(gameTime);
+                    endscreen.Update(gameTime,"Game Over");
+                    break;
+                case GameState.levelpassed:
+                    endscreen.Update(gameTime, "Level Passed");
                     break;
                 case GameState.exit:
                     Exit();
@@ -177,27 +171,18 @@ namespace eindopdracht
             switch (Gamestate)
             {
                 case GameState.Menu:
-                    menu.Draw( gameTime, _spriteBatch);
-                    
+                    menu.Draw( gameTime, _spriteBatch);                    
                     break;
-
-
                 case GameState.level1:
                     level1.Draw(gameTime, _spriteBatch);
                     break;
-                case GameState.level2:
-                    /*
-                    hero.Draw(_spriteBatch);
-                    greenman1?.Draw(_spriteBatch);
-                    menubutton.Draw(gameTime,_spriteBatch);
-                    */
-                    level2.Draw(gameTime, _spriteBatch);
-                    
+                case GameState.level2:                    
+                    level2.Draw(gameTime, _spriteBatch);                   
                     break;
-
-
                 case GameState.gameover:
-                    gameover.Draw(gameTime, _spriteBatch);
+                case GameState.levelpassed:
+                    endscreen.Draw(gameTime, _spriteBatch);
+                    
                     break;
                 default:
                     

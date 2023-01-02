@@ -88,6 +88,10 @@ namespace eindopdracht.levels
         {
             
             Game1.Gamestate = GameState.gameover;
+        }public void levelpassed()
+        {
+            
+            Game1.Gamestate = GameState.levelpassed;
         }
 
         public void CreateBlocks()
