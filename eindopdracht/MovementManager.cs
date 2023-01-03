@@ -38,9 +38,6 @@ namespace eindopdracht
                 if (upkeyisup)
                 {
                 upkeyisup = false;
-                    
-
-
                 }
                 
                 

@@ -153,7 +153,7 @@ namespace eindopdracht.enemys
         private void checkhits()
         {
             if (fightingcooldown >= 200)
-            {
+            {   
 
 
 

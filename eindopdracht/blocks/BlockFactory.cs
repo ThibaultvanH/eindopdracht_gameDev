@@ -34,9 +34,6 @@ namespace eindopdracht.blocks
 
             if (type == level.type.air)
             {
-
-
-
             }
             return newBlock;
         }

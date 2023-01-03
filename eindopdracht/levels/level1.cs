@@ -103,7 +103,7 @@ namespace eindopdracht.levels
 
         public override void Update(GameTime gameTime)
         {
-            timer += gameTime.ElapsedGameTime.TotalSeconds;
+            
             if (hero.health <= 0)
             {
                 Gameover();

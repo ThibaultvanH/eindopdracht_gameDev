@@ -39,7 +39,7 @@ namespace eindopdracht.levels
 
         public int wave = 0;
         public String wavestr = "";
-        public double timer = 0;
+       
         
 
         public static List<Rectangle> grassup = new List<Rectangle>();

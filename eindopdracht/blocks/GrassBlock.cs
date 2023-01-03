@@ -27,10 +27,7 @@ namespace eindopdracht.blocks
 
         }
 
-        public override string ToString()
-        {
-            return "grassBlock";
-        }
+        
 
 
     }
